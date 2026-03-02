@@ -49,6 +49,8 @@ jobs:
           # Copiar archivos compilados y PDF al sitio
           cp -r cicd-github-actions/dist/* _site/cicd-github-actions/
           cp cicd-github-actions/cicd-github-actions.pdf _site/cicd-github-actions/
+          # Copiar el index.html principal
+          cp index.html _site/index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
