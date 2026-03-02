@@ -37,7 +37,7 @@ jobs:
         run: |
           cd cicd-github-actions
           # Instalar navegadores para playwright
-          pnpm exec playwright install chromium
+          pnpm exec playwright-chromium install chromium
           pnpm exec slidev export --format pdf --output cicd-github-actions.pdf
 
       - name: Prepare site
