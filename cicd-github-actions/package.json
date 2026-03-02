@@ -1,0 +1,19 @@
+{
+  "name": "cicd-github-actions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "slidev build",
+    "export": "slidev export --format pdf",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.15.0",
+  "devDependencies": {
+    "@slidev/cli": "^52.14.0",
+    "@slidev/theme-default": "^0.25.0"
+  }
+}

@@ -1,0 +1,55 @@
+name: Build and Deploy GitHub Actions Course
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: |
+          cd cicd-github-actions
+          pnpm install
+
+      - name: Build Slidev
+        run: |
+          cd cicd-github-actions
+          # El nombre del repositorio es MicroCredencialGit
+          pnpm exec slidev build --base /MicroCredencialGit/cicd-github-actions/
+
+      - name: Export to PDF
+        run: |
+          cd cicd-github-actions
+          # Instalar navegadores para playwright
+          pnpm exec playwright install chromium
+          pnpm exec slidev export --format pdf --output cicd-github-actions.pdf
+
+      - name: Prepare site
+        run: |
+          mkdir -p _site/cicd-github-actions
+          # Copiar archivos compilados y PDF al sitio
+          cp -r cicd-github-actions/dist/* _site/cicd-github-actions/
+          cp cicd-github-actions/cicd-github-actions.pdf _site/cicd-github-actions/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          publish_branch: gh-pages
