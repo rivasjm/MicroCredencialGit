@@ -1,0 +1,46 @@
+name: Build and Deploy Slidev Presentations
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+
+      - name: Build and export all Slidev presentations
+        run: |
+          set -e
+          for dir in tema1-gcsw tema2-agile; do
+            cd $dir
+            pnpm install
+            pnpm exec playwright install
+            pnpm slidev build --base "/MetodosDeDesarrollo/$dir/"
+            pnpm slidev export --format pdf
+            PDFNAME="${dir}-export.pdf"
+            mv slides-export.pdf $PDFNAME
+            mkdir -p ../_site/$dir
+            cp -r dist/* ../_site/$dir/
+            cp $PDFNAME ../_site/$dir/
+            cd ..
+          done
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          publish_branch: gh-pages

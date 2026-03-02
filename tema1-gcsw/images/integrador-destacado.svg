@@ -1,0 +1,65 @@
+<svg width="800" height="450" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+
+  <rect x="50" y="50" width="200" height="70" fill="white" stroke="black" stroke-width="2"/>
+  <text x="150" y="85" font-family="Arial" font-size="16" text-anchor="middle">Repositorio Central</text>
+  <text x="150" y="105" font-family="Arial" font-size="14" text-anchor="middle">(Público)</text>
+
+  <rect x="300" y="50" width="200" height="70" fill="white" stroke="black" stroke-width="2"/>
+  <text x="400" y="85" font-family="Arial" font-size="16" text-anchor="middle">Repositorio Clonado 00</text>
+  <text x="400" y="105" font-family="Arial" font-size="14" text-anchor="middle">(Público)</text>
+
+  <rect x="550" y="50" width="200" height="70" fill="white" stroke="black" stroke-width="2"/>
+  <text x="650" y="85" font-family="Arial" font-size="16" text-anchor="middle">Repositorio Clonado 01</text>
+  <text x="650" y="105" font-family="Arial" font-size="14" text-anchor="middle">(Público)</text>
+
+  <rect x="50" y="250" width="200" height="70" fill="white" stroke="black" stroke-width="2"/>
+  <text x="150" y="285" font-family="Arial" font-size="16" text-anchor="middle">Integrador</text>
+  <text x="150" y="305" font-family="Arial" font-size="14" text-anchor="middle">(Privado)</text>
+
+  <rect x="300" y="250" width="200" height="70" fill="white" stroke="black" stroke-width="2"/>
+  <text x="400" y="275" font-family="Arial" font-size="14" text-anchor="middle">Repositorio</text>
+  <text x="400" y="295" font-family="Arial" font-size="14" text-anchor="middle">Desarrollador 00</text>
+  <text x="400" y="315" font-family="Arial" font-size="12" text-anchor="middle">(Privado)</text>
+
+  <rect x="550" y="250" width="200" height="70" fill="white" stroke="black" stroke-width="2"/>
+  <text x="650" y="275" font-family="Arial" font-size="14" text-anchor="middle">Repositorio</text>
+  <text x="650" y="295" font-family="Arial" font-size="14" text-anchor="middle">Desarrollador 01</text>
+  <text x="650" y="315" font-family="Arial" font-size="12" text-anchor="middle">(Privado)</text>
+
+  <line x1="150" y1="250" x2="150" y2="130" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="170" y="190" font-family="Arial" font-size="12">push</text>
+
+  <line x1="100" y1="120" x2="100" y2="240" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="80" y="180" font-family="Arial" font-size="12">pull</text>
+
+  <line x1="330" y1="120" x2="200" y2="240" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="280" y="170" font-family="Arial" font-size="12">pull</text>
+
+  <line x1="580" y1="120" x2="200" y2="240" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="400" y="170" font-family="Arial" font-size="12">pull</text>
+
+  <line x1="400" y1="120" x2="400" y2="240" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="420" y="180" font-family="Arial" font-size="12">pull</text>
+
+  <line x1="650" y1="120" x2="650" y2="240" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="670" y="180" font-family="Arial" font-size="12">pull</text>
+
+  <line x1="450" y1="250" x2="450" y2="130" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="470" y="190" font-family="Arial" font-size="12">push</text>
+
+  <line x1="700" y1="250" x2="700" y2="130" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="720" y="190" font-family="Arial" font-size="12">push</text>
+
+  <path d="M350,320 C250,380 200,380 200,320" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="300" y="350" font-family="Arial" font-size="12" text-anchor="middle">pull request</text>
+
+  <path d="M600,320 C500,380 200,380 200,320" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="400" y="390" font-family="Arial" font-size="12" text-anchor="middle">pull request</text>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+    </marker>
+  </defs>
+
+</svg>
