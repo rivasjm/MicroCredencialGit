@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presentaciones - Métodos de Desarrollo (UC)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f6fbf7;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: linear-gradient(90deg, #22543d 60%, #38b2ac 100%);
+      color: #fff;
+      padding: 2.5rem 1rem 1.5rem 1rem;
+      text-align: center;
+      box-shadow: 0 2px 12px #22543d33;
+      border-radius: 0 0 18px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 0.3em;
+      text-shadow: 0 2px 8px #22543d44;
+    }
+    header .subtitulo {
+      font-size: 1.25rem;
+      font-weight: 400;
+      margin-bottom: 0.2em;
+      color: #e6fffa;
+      letter-spacing: 0.5px;
+    }
+    header::after {
+      content: "";
+      position: absolute;
+      right: -60px;
+      top: 10px;
+      width: 120px;
+      height: 120px;
+      background: rgba(255,255,255,0.10);
+      border-radius: 50%;
+      z-index: 0;
+    }
+    h2 {
+      color: #22543d;
+      margin-top: 2rem;
+    }
+    main {
+      max-width: 700px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 16px #22543d22;
+      padding: 2rem;
+    }
+    .temas-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .tema-card {
+      background: #e6fffa;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px #22543d22;
+      padding: 1.5rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7em;
+      border-left: 6px solid #38b2ac;
+      transition: box-shadow 0.2s;
+    }
+    .tema-card .tema {
+      font-size: 1.18em;
+      color: #22543d;
+      margin-bottom: 0.2em;
+    }
+    .tema-card .enlaces {
+      display: flex;
+      gap: 1.2em;
+      align-items: center;
+    }
+    .tema-card .pdf-link {
+      margin-left: 0;
+    }
+    .tema-card.tema-pendiente {
+      opacity: 0.6;
+      border-left: 6px solid #68d391;
+    }
+    a {
+      color: #22543d;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: #38b2ac;
+      text-decoration: underline;
+    }
+    .pdf-link {
+      margin-left: 1.2em;
+      font-size: 0.98em;
+      color: #22543d;
+    }
+    .tema {
+      font-weight: bold;
+      color: #22543d;
+    }
+    footer {
+      text-align: center;
+      color: #38b2ac;
+      font-size: 0.95em;
+      margin: 2rem 0 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Métodos de Desarrollo</h1>
+    <div class="subtitulo">Universidad de Cantabria</div>
+  </header>
+  <main>
+    <section>
+      <div class="temas-grid">
+        <!-- Tema 1 -->
+        <div class="tema-card">
+          <div class="tema">Tema 1: Gestión Avanzada de la Configuración de Sistemas Software</div>
+          <div class="enlaces">
+            <a href="tema1-gcsw/" target="_blank">🌐 Ver presentación HTML</a>
+            <span class="pdf-link">|</span>
+            <a class="pdf-link" href="tema1-gcsw/tema1-gcsw-export.pdf" target="_blank">📄 Descargar PDF</a>
+          </div>
+        </div>
+        <!-- Tema 2 -->
+        <div class="tema-card">
+          <div class="tema">Tema 2: Metodologías de Desarrollo Software Ágiles</div>
+          <div class="enlaces">
+            <a href="tema2-agile/" target="_blank">🌐 Ver presentación HTML</a>
+            <span class="pdf-link">|</span>
+            <a class="pdf-link" href="tema2-agile/tema2-agile-export.pdf" target="_blank">📄 Descargar PDF</a>
+          </div>
+        </div>
+        <!-- Aquí se pueden añadir más temas en el futuro -->
+      </div>
+    </section>
+  </main>
+  <footer>
+    &copy; 2025 Juan M Rivas (rivasjm@unican.es)
+  </footer>
+</body>
+</html>
