@@ -28,27 +28,23 @@ jobs:
       - name: Install dependencies
         run: |
           cd cicd-github-actions
+          # Instalar dependencias
           pnpm install
-
-      - name: Build Slidev
-        run: |
-          cd cicd-github-actions
+          
           # El nombre del repositorio es MicroCredencialGit
           pnpm exec slidev build --base /MicroCredencialGit/cicd-github-actions/
-
-      - name: Export to PDF
-        run: |
-          cd cicd-github-actions
+          
           # Instalar navegadores para playwright
           pnpm exec playwright install chromium
           pnpm exec slidev export --format pdf --output cicd-github-actions.pdf
-
-      - name: Prepare site
-        run: |
+          
+          # Crear la estructura de directorios para GitHub Pages
           mkdir -p _site/cicd-github-actions
+          
           # Copiar archivos compilados y PDF al sitio
           cp -r cicd-github-actions/dist/* _site/cicd-github-actions/
           cp cicd-github-actions/cicd-github-actions.pdf _site/cicd-github-actions/
+          
           # Copiar el index.html principal
           cp index.html _site/index.html
 
