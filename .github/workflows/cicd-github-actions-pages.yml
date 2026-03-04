@@ -40,7 +40,9 @@ jobs:
           
           # Crear la estructura de directorios para GitHub Pages
           mkdir -p _site/cicd-github-actions
-          
+      
+      -name: Preparar contenido para GitHub Pages
+        run: |    
           # Copiar archivos compilados y PDF al sitio
           cp -r cicd-github-actions/dist/* _site/cicd-github-actions/
           cp cicd-github-actions/cicd-github-actions.pdf _site/cicd-github-actions/
