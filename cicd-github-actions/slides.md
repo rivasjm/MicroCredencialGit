@@ -266,6 +266,175 @@ GitHub Actions es la plataforma de automatización de GitHub para definir workfl
 <InfoBox content="Cada workflow se define con un archivo <code>*.yml</code> en el directorio <code>.github/workflows/</code> del repositorio, que especifica eventos, jobs, steps, etc."/>
 
 ---
+layout: two-cols
+---
+# Workflow básico
 
-# Github Actions
+::left::
+
+```yml{*|1|3-5|7-9|7-11|11-13|11-20|11-23}
+name: Java Maven Build
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Compilar y empaquetar
+        run: mvn clean package
+```
+
+::right::
+
+<br>
+<br>
+
+<div class="pl-6 flex flex-col gap-2">
+
+<v-click at="1">
+<div class="text-sm p-3 border-l-4 border-blue-500 bg-blue-500/10">
+Nombre del workflow, se verá en la pestaña Actions en GitHub.
+</div>
+</v-click>
+
+<v-click at="2">
+<div class="text-sm p-3 border-l-4 border-green-500 bg-green-500/10">
+Evento: El workflow se dispara solo al hacer push en la rama main.
+</div>
+</v-click>
+
+<v-click at="3">
+<div class="text-sm p-3 border-l-4 border-purple-500 bg-purple-500/10">
+Runner: Se define el job <code>build</code>, que se ejecutará en una máquina virtual Linux.
+</div>
+</v-click>
+
+<v-click at="5">
+<div class="text-sm p-3 border-l-4 border-orange-500 bg-orange-500/10">
+Acción <code>Checkout</code>: ejecuta <code>git clone</code>.
+</div>
+</v-click>
+
+<v-click at="6">
+<div class="text-sm p-3 border-l-4 border-cyan-500 bg-cyan-500/10">
+Instalación del JDK 21 con distribución Temurin y caché de dependencias.
+</div>
+</v-click>
+
+<v-click at="7">
+<div class="text-sm p-3 border-l-4 border-red-500 bg-red-500/10">
+Ejecución directa de Maven para compilar y empaquetar el proyecto.
+</div>
+</v-click>
+
+</div>
+
+---
+layout: two-cols
+---
+
+# Step
+
+::left::
+
+```yml
+- name: Empaquetar proyecto con Maven
+  id: maven_package
+  if: success() # por defecto siempre es success
+  run: mvn clean package -DskipTests
+  working-directory: ./
+  shell: bash
+  env:
+    MAVEN_OPTS: "-Xmx1024m"
+  continue-on-error: true
+  timeout-minutes: 15
+```
+
+::right::
+
+<br>
+<br>
+
+<div class="pl-6 flex flex-col gap-2">
+
+<div class="text-sm p-3 border-l-4 border-red-500 bg-red-500/10">
+Cada <code>Step</code> se ejecuta con un proceso shell nuevo, desde el directorio raiz. Usar comando <code>cd</code> o establecer <code>working-directory</code>.
+</div>
+
+<div class="text-sm p-3 border-l-4 border-blue-500 bg-blue-500/10">
+Pueden ejecutarse condicionalmente con <code>if</code>:
+<ul>
+<li> <code>success()</code>: se ejecuta si el Step anterior fue exitoso </li>
+<li> <code>failure()</code>: se ejecuta si algún Step anterior falló </li>
+<li> <code>always()</code>: se ejecuta siempre </li>
+<li> <code>cancelled()</code>: se ejecuta si el workflow se canceló </li>
+<li> <code>steps.maven_package.outcome == 'failure'</code> </li>:  comprobando el estado de un step concreto 
+</ul>
+</div>
+
+<div class="text-sm p-3 border-l-4 border-green-500 bg-green-500/10">
+Definición de variables de entorno <code>env</code>:
+<ul>
+<li> A nivel del Step </li>
+<li> A nivel del job </li>
+<li> A nivel del Workflow </li>
+</ul>
+</div>
+
+</div>
+
+---
+
+# Ejercicio 1.1
+
+Creación de un `Workflow` sencillo
+
+1. Descargar el código fuente de una aplicación java sencilla en este <a href="https://unican-my.sharepoint.com/:u:/g/personal/rivasjm_unican_es/IQAUk8dBve_4TYZ38QRCCxpPAfCJZ-LyN4gNZUx-iToxzrg?e=WbwQHb"> enlace</a>
+2. Crear un repositorio en GitHub para alojar el código de esa aplicación.
+3. Activar GitHub Actions en el repositorio: `Settings -> Actions -> General -> Allow all actions`
+4. Crear un `Workflow` de GitHub Actions para compilar, ejecutar las pruebas y empaquetar el programa en un archivo `jar`.
+    - El Workflow tiene que ejecutarse al hacer un push en la rama `main`
+    - La aplicación utiliza el gestor Maven.
+        - Compilación: `mvn clean compile`
+        - Ejecución de las pruebas: `mvn clean test`
+        - Empaquetamiento: `mvn clean package`
+5. Comprobar que el `Workflow` se ejecuta cuando se hace un push en la rama `main`
+
+---
+
+# Ejercicio 1.2
+
+Comprobar cómo se visualiza un `Workflow` que falla.
+
+1. Crear una rama nueva, y comprobar que cuando se hace un `push` de esa rama, el `Workflow` no se ejecuta.
+2. Modificar el `Workflow` para también se ejecute en la rama nueva.
+3. Modificar algun fichero java para añadir algún tipo de error de compilación. Comprobar que el `Workflow` falla.
+4. Rehacer el cambio anterior. Comprobar que ahora el `Workflow` funciona.
+5. Modificar cualquier prueba para que fallen. Se encuentran en el directorio `src/test/java`. Comprobar que el `Workflow` vuelve a fallar.
+
+---
+
+# Ejercicio 1.3
+
+Recuperar artefactos que se generan en GitHub Actions.
+
+1. La ejecución de Maven genera una serie de artefactos que muestran información detallada del proceso de compilación, pruebas o empaquetado. Estos artefactos se generan en el directorio `target`
+    - Comprobar que el directorio `target` esta siendo ignorado por git (fichero `.gitignore`)
+2. Recuperar estos artefactos utilizando la acción `actions/upload-artifact@v4`. Tiene dos parámetros:
+    - path: directorio que queremos recuperar 
+    - name: nombre que le vamos a dar a este artefacto (puede ser cualquiera)
 
