@@ -233,6 +233,11 @@ GitHub Actions es la plataforma de automatización de GitHub para definir workfl
 
 <div grid="~ cols-3 gap-4" m="t-5">
   <div>
+    <h4 class="text-red-600 font-bold">🏃‍♂️ Runners</h4>
+    <p class="text-sm">Máquinas (hosted o self-hosted) donde se ejecutan los jobs y sus steps. <a href="https://github.com/actions/runner-images">Máquinas disponibles</a>.</p>
+  </div>
+
+  <div>
     <h4 class="text-blue-600 font-bold">⚙️ Workflows</h4>
     <p class="text-sm">Un proceso que ejecuta jobs cuando ocurre un evento.</p>
   </div>
@@ -244,26 +249,25 @@ GitHub Actions es la plataforma de automatización de GitHub para definir workfl
 
   <div>
     <h4 class="text-purple-600 font-bold">🧩 Jobs</h4>
-    <p class="text-sm">Conjunto de steps que se ejecutan en un runner (en paralelo o en secuencia).</p>
+    <p class="text-sm">Conjunto de steps que se ejecutan en una máquina (runner) distinto. Pueden ejecutarse en paralelo o secuencialmente.</p>
   </div>
 
   <div>
     <h4 class="text-teal-600 font-bold">🪜 Steps</h4>
-    <p class="text-sm">Pasos individuales dentro de un job. Pueden ser un shell script o un Action.</p>
+    <p class="text-sm">Pasos individuales dentro de un job. Pueden ser un shell script o un Action. Se ejecutan de manera secuencial.</p>
   </div>
 
   <div>
     <h4 class="text-orange-600 font-bold">🔨 Actions</h4>
     <p class="text-sm">Acciones reutilizables que encapsulan tareas (publicadas en Marketplace o locales).</p>
   </div>
-
-  <div>
-    <h4 class="text-red-600 font-bold">🏃‍♂️ Runners</h4>
-    <p class="text-sm">Máquinas (hosted o self-hosted) donde se ejecutan los jobs y sus steps.</p>
-  </div>
 </div>
 
-<InfoBox content="Cada workflow se define con un archivo <code>*.yml</code> en el directorio <code>.github/workflows/</code> del repositorio, que especifica eventos, jobs, steps, etc."/>
+<br>
+<div class="text-sm p-3 border-l-4 border-purple-500 bg-purple-500/10">
+"Cada workflow se define con un archivo <code>*.yml</code> en el directorio <code>.github/workflows/</code> del repositorio, que especifica eventos, jobs, steps, etc."
+</div>
+
 
 ---
 layout: two-cols
@@ -437,4 +441,150 @@ Recuperar artefactos que se generan en GitHub Actions.
 2. Recuperar estos artefactos utilizando la acción `actions/upload-artifact@v4`. Tiene dos parámetros:
     - path: directorio que queremos recuperar 
     - name: nombre que le vamos a dar a este artefacto (puede ser cualquiera)
+3. Hacer que el `Step` que sube los artefactos sólo ocurra cuando las pruebas fallen 
+    - Para hacer esto, lo recomendable es tener un `Step` que únicamente ejecute las pruebas.
+    - Subir sólo los artefactos localizados en el directorio `target/surefire-reports/`
+
+---
+layout: two-cols-header
+---
+
+# Dependencias entre Workflows
+
+Podemos lanzar un `Workflow` cuando termina otro utilizando `workflow_run`
+
+<br>
+
+::left::
+
+```yml
+# Workflow receptor (por ejemplo: downstream.yml)
+on:
+  workflow_run:
+    workflows: ["CI Build"]
+    types: [completed]
+
+jobs:
+  run-after-build:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notificar o continuar pipeline
+        run: echo "El workflow 'CI Build' finalizó correctamente."
+```
+
+::right::
+
+- Este `Workflow` se lanzará cuando el `Workflow` `"CI Build"` termine, aunque este falle.
+- Podemos poner una condicón `if` al `job` para que se ejecute sólo cuando el `Workflow` haya finalizado exitosamente.
+
+---
+layout: two-cols-header
+---
+
+# Dependencias entre Jobs
+
+Por defecto los `jobs` dentro de un `workflow` se ejecutan en paralelo. Con `needs` podemos establecer dependencias entre `jobs`.
+
+<br>
+
+::left::
+
+```yml
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compilar
+        run: |
+          mvn clean compile
+
+  test:
+    needs: compile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ejecutar pruebas si la compilación funcionó
+        run: |
+          mvn clean test
+```
+
+::right::
+
+- El `job` `test` se ejecuta cuando `compile` termina exitosamente.
+- Podemos hacer que un `job` se ejecute cuando otro falle, añadiendo una clausula `if` al `job`
+    - `- if failure()`
+
+---
+layout: two-cols-header
+---
+
+# Matrices (`strategy.matrix`)
+
+`strategy.matrix` permite ejecutar el mismo job varias veces, con distintas configuraciones. Típicamente para probar distintos sistemas operativos o versiones de librerías.
+::left::
+
+```yml
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        java: [11, 17]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+
+      - name: Build and test
+        run: ...
+```
+
+::right::
+
+- Este ejemplo ejecuta el `job` `build-and-test` 6 veces.
+    - 2 versiones de Java (11, 17)
+    - 3 sistemas operativos distintos (Linux, Windows, macOS)
+- Por defecto, si un `job` falla, se cancela toda la matriz. 
+    - Para no cancelar la matriz, usar `fail-fast: false`.
+
+---
+
+# Ejercicio 1.4 — Dependencias entre jobs
+
+Crear un workflow que contenga dos jobs: `compile` y `test`.
+
+Instrucciones:
+1. En el Ejercicio 1.3, todo se ejecutaba en el mismo `job`. Ahora tenemos que modificar ese `workflow` para que haga el trabajo en varios `jobs`.
+    - El `job` `compile` debe compilar el proyecto:
+    - El `job` `test` debe ejecutar las pruebas. Sólo debe ejecutarse si el `job` `compile` fue exitoso. La recuperación de artefactos puede hacerse en este `job`.
+2. Verificar en la pestaña Actions que `test` se ejecuta solo si `compile` finaliza correctamente.
+
+---
+
+# Ejercicio 1.5 — Matrix
+
+Crear un workflow para compilar y ejecutar pruebas en macOS, Windows y Linux usando `strategy.matrix`.
+
+Instrucciones:
+1. Modificar el `workflow` del ejercicio 1.4 para:
+    - Compilar con java versión 17 y linux.
+    - Ejecutar las pruebas en macOS, windows y linux, utilizando JDK versión 17, 21 y 25.
+2. Comprobar cómo se muestran los `jobs` en la pestaña `Actions` del repositorio.
+
+---
+
+# GitHub Releases
+
+Publicar una versión distribuible de la aplicación dentro de GitHub
+
+<div class="flex justify-center mt-4">
+  <img src="/images/openclaw.png" alt="Desorden en el desarrollo" class="w-160 rounded" />
+</div>
 
