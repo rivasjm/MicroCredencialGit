@@ -588,3 +588,33 @@ Publicar una versión distribuible de la aplicación dentro de GitHub
   <img src="/images/openclaw.png" alt="Desorden en el desarrollo" class="w-160 rounded" />
 </div>
 
+---
+
+# GitHub Releases
+
+Se recomienda utilizar la acción predefinida `softprops/action-gh-release`.
+<br>
+<a href="https://github.com/softprops/action-gh-release"> Documentación </a>
+
+<br>
+Configuración básica:
+```yml
+- name: Create Release
+  uses: softprops/action-gh-release@v1
+  if: github.ref_type == 'tag'  # sólo ejecutarlo si se ha lanzado por la creación de un tag
+  with:
+    files: | # aquí van los archivos que queremos publicar en la release. Lo normal es que se creen en jobs anteriores.
+      */*.zip 
+    body: |
+      # Descripción del release. Típicamente en formato Markdown.
+      # Se pueden poner múltiples líneas.
+    body_path: <path> # alternativamente la descripción puede venir de un archivo
+    prerelease: false
+```
+
+---
+
+# Ejercicio 1.6 - Creación de un Release
+
+1. Crear un Github Release cada vez que se crea una etiqueta con formato `v*`
+    - Para facilitar el proceso, se puede utilizar este `workflow`
