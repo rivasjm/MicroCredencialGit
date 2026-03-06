@@ -618,3 +618,11 @@ Configuración básica:
 
 1. Crear un Github Release cada vez que se crea una etiqueta con formato `v*`
     - Para facilitar el proceso, se puede utilizar este `workflow`
+
+---
+
+# GitHub Secrets
+
+**Problema**: ¿Y si necesitamos alguna contraseña o API Key secreta para ejecutar las pruebas o hacer el despliegue?
+<br>
+**Solución**: GitHub Secrets
