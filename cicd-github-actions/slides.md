@@ -216,12 +216,12 @@ sequenceDiagram
 <div grid="~ cols-2 gap-6" m="t-6">
   <Definicion title="Integración Continua (CI)" emoji="🔄">
     Práctica de integrar cambios de código de forma frecuente en un repositorio compartido,
-    ejecutando automáticamente build y pruebas para detectar errores lo antes posible.
+    ejecutando automáticamente la construcción y pruebas para detectar errores lo antes posible.
   </Definicion>
 
   <Definicion title="Despliegue Continuo (CD)" emoji="🚀">
     Práctica de publicar automáticamente en producción cada cambio que supera las validaciones
-    del pipeline, sin intervención manual en la fase de despliegue.
+    establecidas, sin intervención manual en la fase de despliegue.
   </Definicion>
 </div>
 
@@ -233,23 +233,23 @@ GitHub Actions es la plataforma de automatización de GitHub para definir workfl
 
 <div grid="~ cols-3 gap-4" m="t-5">
   <div>
-    <h4 class="text-red-600 font-bold">🏃‍♂️ Runners</h4>
-    <p class="text-sm">Máquinas (hosted o self-hosted) donde se ejecutan los jobs y sus steps. <a href="https://github.com/actions/runner-images">Máquinas disponibles</a>.</p>
+    <h4 class="text-blue-600 font-bold">⚙️ Workflows</h4>
+    <p class="text-sm">Un proceso que ejecuta jobs cuando ocurre un evento. Fichero YAML. <a href="https://github.com/actions/starter-workflows">Repositorio de templates.</a></p>
   </div>
 
   <div>
-    <h4 class="text-blue-600 font-bold">⚙️ Workflows</h4>
-    <p class="text-sm">Un proceso que ejecuta jobs cuando ocurre un evento.</p>
+    <h4 class="text-red-600 font-bold">🏃‍♂️ Runners</h4>
+    <p class="text-sm">Máquinas (en la nube o self-hosted) donde se ejecutan los jobs y sus steps. <a href="https://github.com/actions/runner-images">Máquinas disponibles</a>.</p>
   </div>
 
   <div>
     <h4 class="text-green-600 font-bold">📣 Events</h4>
-    <p class="text-sm">Actividad que lanza un workflow (push, pull_request, schedule, etc.).</p>
+    <p class="text-sm">Los workflows se activan por eventos (push, pull_request, schedule, etc.). <a href="https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows">Lista de eventos disponibles.</a></p>
   </div>
 
   <div>
     <h4 class="text-purple-600 font-bold">🧩 Jobs</h4>
-    <p class="text-sm">Conjunto de steps que se ejecutan en una máquina (runner) distinto. Pueden ejecutarse en paralelo o secuencialmente.</p>
+    <p class="text-sm">Conjunto de comandos que se ejecutan. Cada job se ejecuta en una instancia runner nueva. Pueden ejecutarse en paralelo (por defecto) o secuencialmente.</p>
   </div>
 
   <div>
@@ -259,13 +259,14 @@ GitHub Actions es la plataforma de automatización de GitHub para definir workfl
 
   <div>
     <h4 class="text-orange-600 font-bold">🔨 Actions</h4>
-    <p class="text-sm">Acciones reutilizables que encapsulan tareas (publicadas en Marketplace o locales).</p>
+    <p class="text-sm">Bloques reutilizables que se pueden ejecutar en un step (<a href="https://github.com/marketplace?type=actions">Marketplace</a>).</p>
   </div>
 </div>
 
-<br>
 <div class="text-sm p-3 border-l-4 border-purple-500 bg-purple-500/10">
-"Cada workflow se define con un archivo <code>*.yml</code> en el directorio <code>.github/workflows/</code> del repositorio, que especifica eventos, jobs, steps, etc."
+Cada workflow se define con un archivo <code>*.yml</code> en el directorio <code>.github/workflows/</code>. Especifica eventos, jobs, steps, etc.
+<br>
+<!-- <a href="https://docs.github.com/en/billing/concepts/product-billing/github-actions#free-use-of-github-actions">Limitaciones de uso</a> de GitHub Actions según suscripción. -->
 </div>
 
 
@@ -357,13 +358,13 @@ layout: two-cols
 
 ```yml
 - name: Empaquetar proyecto con Maven
-  id: maven_package
+  id: maven_package  # id opcional
   if: success() # por defecto siempre es success
   run: mvn clean package -DskipTests
-  working-directory: ./
+  working-directory: <path>  # opcional
   shell: bash
-  env:
-    MAVEN_OPTS: "-Xmx1024m"
+  env:  # variables de entorno para este Step
+    MAVEN_OPTS: "-Xmx1024m"  
   continue-on-error: true
   timeout-minutes: 15
 ```
@@ -425,10 +426,13 @@ Creación de un `Workflow` sencillo
 Comprobar cómo se visualiza un `Workflow` que falla.
 
 1. Crear una rama nueva, y comprobar que cuando se hace un `push` de esa rama, el `Workflow` no se ejecuta.
-2. Modificar el `Workflow` para también se ejecute en la rama nueva.
+2. Modificar el `Workflow` para que también se ejecute en la rama nueva. Comprobar que el `Workflow` se ejecuta ahora.
 3. Modificar algun fichero java para añadir algún tipo de error de compilación. Comprobar que el `Workflow` falla.
 4. Rehacer el cambio anterior. Comprobar que ahora el `Workflow` funciona.
-5. Modificar cualquier prueba para que fallen. Se encuentran en el directorio `src/test/java`. Comprobar que el `Workflow` vuelve a fallar.
+5. Modificar cualquier prueba para que no pasen correctamente. 
+    - Las pruebas se encuentran en el directorio `src/test/java`. 
+    - Buscar alguna aserción como `assertEquals(550, firstMovie.getId());`, y cambiar el valor esperado (550 por otro)
+    - Comprobar que ahora el `Workflow` falla.
 
 ---
 
@@ -458,7 +462,7 @@ Podemos lanzar un `Workflow` cuando termina otro utilizando `workflow_run`
 ::left::
 
 ```yml
-# Workflow receptor (por ejemplo: downstream.yml)
+# Este Workflow depende del Workflow  "CI Build"   
 on:
   workflow_run:
     workflows: ["CI Build"]
@@ -566,6 +570,13 @@ Instrucciones:
     - El `job` `test` debe ejecutar las pruebas. Sólo debe ejecutarse si el `job` `compile` fue exitoso. La recuperación de artefactos puede hacerse en este `job`.
 2. Verificar en la pestaña Actions que `test` se ejecuta solo si `compile` finaliza correctamente.
 
+<br>
+<br>
+
+<div class="text-sm p-3 border-l-4 border-purple-500 bg-purple-500/10">
+<b>NOTA</b> Cada job se ejecuta en una máquina virtual nueva. Este ejercicio sirve para establecer dependencias entre tareas. Pero en un caso real, separar compilación y test de esta manera no tendría sentido, porque el job de las pruebas hace la compilación.
+</div>
+
 ---
 
 # Ejercicio 1.5 — Matrix
@@ -616,13 +627,89 @@ Configuración básica:
 
 # Ejercicio 1.6 - Creación de un Release
 
-1. Crear un Github Release cada vez que se crea una etiqueta con formato `v*`
-    - Para facilitar el proceso, se puede utilizar este `workflow`
+Crear un Github Release cada vez que se crea una etiqueta con formato `v*`
 
+1. Crear un nuevo `workflow` (un nuevo fichero .yml) para hacer el *release*.
+2. Para facilitar el proceso, se puede utilizar este <a href="https://raw.githubusercontent.com/rivasjm/ucred-java-ui-movies/refs/heads/main/.github/workflows/release.yml">workflow</a>
+    - El job `build-jar` construye el archivo jar (empaquetamiento de aplicaciones Java)
+    - El job `build-portable` utiliza la herramienta `jpackage` para crear ejecutables de la aplicación. Utiliza `strategy.matrix` para crear ejecutables para Windows, macOS y Linux.
+    - El job `create-release` utiliza el Action `softprops/action-gh-release@v1` para crear el GitHub Release.
+3. Comprobar que al crear una etiqueta nueva con nombre `v*` (por ejemplo v1.0.0), se crea la Release.
+4. Modificar el workflow para que el body del Release se extraiga de un fichero.
+    - Hay que crear este fichero antes, y subirlo al repositorio.
+
+---
+layout: two-cols-header
 ---
 
 # GitHub Secrets
 
 **Problema**: ¿Y si necesitamos alguna contraseña o API Key secreta para ejecutar las pruebas o hacer el despliegue?
+
+::left::
+
+<div class="flex justify-center mt-4">
+  <img src="/images/secrets.png" alt="GitHub Secrets" class="w-[100%]" />
+</div>
+
+::right::
+
+<div class="pl-6">
+
+Esos Secrets son accesibles en el `workflow`:
+- `${{ secrets.WEBDAV_PASSWORD }}`
+- `${{ secrets.WEBDAV_URL }}`
+- `${{ secrets.WEBDAV_USERNAME }}`
+
+</div>
+
+---
+
+# Limitaciones de uso
+
+<a href="https://docs.github.com/en/billing/concepts/product-billing/github-actions#free-use-of-github-actions"> Límites de uso según plan contratado </a>
+
+<div class="flex justify-center mt-4">
+  <img src="/images/limites.png" alt="Límites de uso" class="w-[45%]" />
+</div>
+
+---
+layout: two-cols-header
+---
+
+# Ejecución Manual: `workflow_dispatch`
+
+Permite lanzar workflows bajo demanda directamente desde la interfaz de GitHub sin necesidad de crear commits falsos.
 <br>
-**Solución**: GitHub Secrets
+
+::left::
+
+```yml
+name: Deploy Manual
+
+on:
+  push:
+    branches: [ "main" ] 
+  
+  workflow_dispatch: # Activa el botón en la UI
+    inputs:  # opcionalmente, permite definir parámetros
+      entorno:
+        description: 'Entorno de destino'
+        required: true
+        default: 'test'
+        type: choice
+        options:
+          - test
+          - prod
+```
+
+::right::
+
+<div class="pl-6 flex flex-col gap-4">
+  <div class="text-sm p-3 border-l-4 border-blue-500 bg-blue-500/10">
+    <b>Botón "Run workflow":</b> Al añadir <code>workflow_dispatch</code> al bloque <code>on</code>, aparece un botón en la pestaña Actions para ejecutar el workflow sin necesidad de hacer un push.
+  </div>
+  <div class="text-sm p-3 border-l-4 border-green-500 bg-green-500/10">
+    <b>Parámetros (Inputs):</b> Opcionalmente, puedes solicitar datos al usuario antes de la ejecución. Estos valores se utilizan en el workflow mediante la sintaxis <code v-pre>${{ inputs.entorno }}</code>.
+  </div>
+</div>
