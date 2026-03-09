@@ -377,7 +377,7 @@ layout: two-cols
 <div class="pl-6 flex flex-col gap-2">
 
 <div class="text-sm p-3 border-l-4 border-red-500 bg-red-500/10">
-Cada <code>Step</code> se ejecuta con un proceso shell nuevo, desde el directorio raiz. Usar comando <code>cd</code> o establecer <code>working-directory</code>.
+Cada <code>Step</code> se ejecuta con un proceso shell nuevo, desde el directorio raiz. Usar comando <code>cd</code> en cada Step, o establecer <code>working-directory</code>.
 </div>
 
 <div class="text-sm p-3 border-l-4 border-blue-500 bg-blue-500/10">
