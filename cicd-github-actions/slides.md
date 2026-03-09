@@ -249,7 +249,7 @@ GitHub Actions es la plataforma de automatización de GitHub para definir workfl
 
   <div>
     <h4 class="text-purple-600 font-bold">🧩 Jobs</h4>
-    <p class="text-sm">Conjunto de comandos que se ejecutan. Cada job se ejecuta en una instancia runner nueva. Pueden ejecutarse en paralelo (por defecto) o secuencialmente.</p>
+    <p class="text-sm">Conjunto de comandos que se ejecutan. Cada job se ejecuta en una instancia runner nueva. Pueden lanzarse en paralelo (por defecto) o secuencialmente.</p>
   </div>
 
   <div>
