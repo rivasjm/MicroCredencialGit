@@ -269,6 +269,16 @@ Cada workflow se define con un archivo <code>*.yml</code> en el directorio <code
 <!-- <a href="https://docs.github.com/en/billing/concepts/product-billing/github-actions#free-use-of-github-actions">Limitaciones de uso</a> de GitHub Actions según suscripción. -->
 </div>
 
+---
+
+# Limitaciones de uso
+
+<a href="https://docs.github.com/en/billing/concepts/product-billing/github-actions#free-use-of-github-actions"> Límites de uso según plan contratado </a>
+
+<div class="flex justify-center mt-4">
+  <img src="/images/limites.png" alt="Límites de uso" class="w-[45%]" />
+</div>
+
 
 ---
 layout: two-cols
@@ -639,6 +649,18 @@ Crear un Github Release cada vez que se crea una etiqueta con formato `v*`
     - Hay que crear este fichero antes, y subirlo al repositorio.
 
 ---
+
+# Despliegue en GitHub Pages
+
+Cada repositorio en GitHub tiene disponible un espacio para alojar una página web estática mediante el servicio GitHub Pages. El despliegue a GitHub Pages se puede hacer desde GitHub Actions automáticamente.
+
+Ejemplo: el repositorio de esta presentación: <a href="https://github.com/rivasjm/MicroCredencialGit">https://github.com/rivasjm/MicroCredencialGit</a>
+
+<div class="flex justify-center mt-4">
+  <img src="/images/repo-slides.png" alt="GitHub Pages" class="w-[60%]" />
+</div>
+
+---
 layout: two-cols-header
 ---
 
@@ -665,13 +687,19 @@ Esos Secrets son accesibles en el `workflow`:
 
 ---
 
-# Limitaciones de uso
+# Ejercicio 1.7
 
-<a href="https://docs.github.com/en/billing/concepts/product-billing/github-actions#free-use-of-github-actions"> Límites de uso según plan contratado </a>
+Publicar una aplicación web (Calculadora) en el espacio personal de la Universidad de Cantabria
 
-<div class="flex justify-center mt-4">
-  <img src="/images/limites.png" alt="Límites de uso" class="w-[45%]" />
-</div>
+1. Descargar el código de la aplicación disponible en este <a href="https://unican-my.sharepoint.com/:u:/g/personal/rivasjm_unican_es/IQCGN5WWoNUCQZsi8TOAX8z1AacLE7mzcPsjO3b0vH9_R4M?e=siwl2q">link</a>.
+2. Crear un repositorio GitHub nuevo para alojar este código
+3. El código ya incluye el workflow de GitHub Actions para alojar la aplicación en el espacio personal. 
+4. Modificar el workflow para que el despliegue se realice en vuestro espacio personal. Hay que definir los siguientes **Secrets** para que funcione:
+    - `WEBDAV_URL`: url del espacio personal. Por defecto es `https://disco.unican.es/hcwebdav/Home%20Unican/www`
+    - `WEBDAV_USERNAME`: tu usuario Unican completo (por ejemplo usuario@unican.es)
+    - `WEBDAV_PASSWORD`: tu contraseña Unican
+5. Ejecuta el workflow, y una vez que finalice comprobar que en tu espacio personal ahora hay una calculadora en el path `https://personales.unican.es/{tu-usuario}/calculadora/`
+    - <a href="https://personales.unican.es/rivasjm/calculadora/">Ejemplo de despliegue en mi página personal</a>
 
 ---
 layout: two-cols-header
