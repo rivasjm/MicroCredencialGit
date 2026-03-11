@@ -275,8 +275,10 @@ Cada workflow se define con un archivo <code>*.yml</code> en el directorio <code
 
 <a href="https://docs.github.com/en/billing/concepts/product-billing/github-actions#free-use-of-github-actions"> Límites de uso según plan contratado </a>
 
+<a href="https://docs.github.com/en/billing/reference/actions-runner-pricing">Precios por minuto si se superan los límites</a>
+
 <div class="flex justify-center mt-4">
-  <img src="/images/limites.png" alt="Límites de uso" class="w-[45%]" />
+  <img src="/images/limites.png" alt="Límites de uso" class="w-[40%]" />
 </div>
 
 
